@@ -1,0 +1,142 @@
+#include "calc.h"
+#include "stdlib.h"
+struct Vector
+{
+	int** chr; //dynamic storage
+	int size;
+};
+const double Euler = 2.71828183;
+const double Pi = 3.1415926;  
+const double Ln_10 = 2.302585092994046;
+//calc 
+void overf(struct Vector* x)//extend the size of x-chr, 
+{							//lighter than setting preset value
+	int i, old_s;
+	old_s = x->size;
+	x->size += 8;
+	int** temp_chr = malloc(x->size * sizeof(int*));
+	for(i = 0; i < old_s; i++) //copy
+	{
+		temp_chr[i] = x->chr[i];
+	}
+	for(i = old_s; i < x->size; i++) //initialize new elements
+	{
+		temp_chr[i] = malloc(sizeof(int));
+		if(temp_chr[i] != 0)
+		{
+			*temp_chr[i] = 85; //stand for U-Undefined
+		}
+	}
+	
+	free(x->chr);
+	x->chr = temp_chr;
+}
+void free_V(struct Vector* x)
+{
+	int i;
+	for(i = 0; i < x->size; i++)
+	{
+		free(x->chr[i]);
+	}
+	free(x->chr);
+}
+void char_set(int* c, int* i, struct Vector* x) //put every char in a separate 
+{
+												//cell of struct Vector starage
+	if (*i < x->size)
+	{
+		if(*x->chr[*i] == 85)  
+		{
+			*x->chr[*i] = *c;
+		}
+	}
+	else 
+		{
+			overf(x);
+			if(*i < x->size) 
+			{
+				*x->chr[*i] = *c;
+			}
+		}
+	++(*i);
+}
+//math op
+double power(double num, double pwr)
+{
+	if(pwr != (int)pwr)
+	{
+		double x, a, n;
+		int i;
+		x = n_log(num);
+		x *= pwr;
+		n = 1.0;
+		a = 1.0 + x;
+		for( i = 2; i < 2000; i++)
+		{
+			n *= i;
+			a += power(x, i)/n;
+		}
+		return a;
+	}
+	int i;
+	double a;
+	a = num;
+	for(i = 1; i < (int)pwr; i++)
+	{
+		a *= num;
+	}
+	return a;
+}
+double n_log(double num) //natural log or ln
+{
+	int i;
+	double x_0, answ;
+	x_0 = (num-1.0)/(num+1.0);
+	answ = x_0;
+	for(i = 3; i <= 20011; i += 2) //algorithm to find realy close vallue, 
+	{							//but not exactly the real answer
+		answ += (power(x_0, i)/i);
+	}
+	return 2.0*answ;
+}
+double a_log(double num) //log 10 or lg
+{
+	return n_log(num)/Ln_10;
+}
+double root_n(double num, int root)
+{
+	int i;
+	double x_0, x_1;
+	x_0 = 1;
+	for(i = 0; i <= 10000; i++)
+	{
+		x_1 = x_0 - (power(x_0, root) - num)/root/power(x_0, root-1);
+		x_0 = x_1;
+	}
+	return x_1;
+}
+int factorial(int num)
+{
+	if(num == 1)
+	{
+		return num;
+	}
+	return num*factorial(num-1);
+}
+double plus(double x, double y)
+{
+	return x + y;
+}
+double minus(double x, double y)
+{
+	
+	return x - y;
+}
+double sum(double x, double y)
+{
+	return x * y;
+}
+double div_(double x, double y)
+{
+	return x / y;
+}
