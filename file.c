@@ -60,6 +60,35 @@ void char_set(int* c, int* i, struct Vector* x) //put every char input into a se
 		}
 	++(*i); //helps in future
 }
+double char_converter(struct Vector* x, int start, int end) 
+{
+    int if_dec = 0; // Flag for decimal point
+    int i, index;
+    double answ = 0.0;
+    double n = 1.0;
+    index = start;
+    
+    for (i = end - start; i >= 0 && *x->chr[index] != '\0'; i--) 
+    {
+        if (*x->chr[index] == 46) // '.' character
+        {
+            if_dec = 1;
+            ++index;
+            continue;
+        }
+        if (if_dec == 0) // Before the decimal point
+        {
+            answ = answ * 10 + ((int)(*x->chr[index]) - '0');
+        }
+        else // After the decimal point
+        {
+            n *= 10;
+            answ += ((int)(*x->chr[index]) - '0') / n;
+        }
+        ++index;
+    }
+    return answ;
+}
 //math op
 double power(double num, double pwr)
 {
