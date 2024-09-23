@@ -9,6 +9,43 @@ const double Euler = 2.71828183;
 const double Pi = 3.1415926;  
 const double Ln_10 = 2.302585092994046;
 //calc 
+void straight_line(struct Vector* x)//get rid of whitespaces caused by space buttom
+{
+    int size;
+    size = x->size-1;
+   for(int i = 0; i <= size; i++)
+   {
+       if(*x->chr[i] == 32)
+       {
+           for(int j = i; j <= size-1; j++)
+           {
+               *x->chr[j] = *x->chr[j+1];
+               *x->chr[j+1] = 32;
+               
+           }
+           if(*x->chr[size] == 32)
+           {
+               *x->chr[size] = 85;
+           }
+       }
+   }
+   for(int i = 0; i <= size; i++) //does not working from first time, need to be performed twice, otherwise double whitespaces become single one,
+   {
+       if(*x->chr[i] == 32)
+       {
+           for(int j = i; j <= size-1; j++)
+           {
+               *x->chr[j] = *x->chr[j+1];
+               *x->chr[j+1] = 32;
+               
+           }
+           if(*x->chr[size] == 32)
+           {
+               *x->chr[size] = 85;
+           }
+       }
+   }
+}
 void overf(struct Vector* x)//extend the size of x-chr, 
 {			    //lighter than setting preset value
 	int i, old_s;
